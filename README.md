@@ -20,6 +20,14 @@ ldid -S out.dylib
 
 ### Windows
 
+MSVC:
 ```
 cl /std:c++latest /EHsc /Feallemande.exe main.cpp
+```
+
+### Linux
+
+GCC:
+```
+g++ -std=c++23 -o allemande main.cpp
 ```

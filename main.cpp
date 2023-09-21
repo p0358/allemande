@@ -53,7 +53,7 @@ void convert_slice(const MemoryAddress d)
 
     //////////////////////////////////////////////////////////
 
-    uint64_t index = sizeof mach_header_64;
+    uint64_t index = sizeof(mach_header_64);
     for (auto _ = 0; _ < header.ncmds; _++)
     {
         auto cmd_d = d.Offset(index);
@@ -66,7 +66,7 @@ void convert_slice(const MemoryAddress d)
 
             for (int i = 0; i < segment_cmd.nsects; i++)
             {
-                auto sec_d = cmd_d.Offset(sizeof segment_command_64).Offset(i * sizeof section_64);
+                auto sec_d = cmd_d.Offset(sizeof(segment_command_64)).Offset(i * sizeof(section_64));
                 auto& section = sec_d.GetValueRef<section_64>();
                 printf("%s\n", section.sectname);
                 std::string_view sectname{ section.sectname };
@@ -82,7 +82,7 @@ void convert_slice(const MemoryAddress d)
                         uint64_t data;
                     };
                     objc_class* classes = d.Offset(section.offset).Cast<objc_class*>();
-                    for (int c = 0; c < (section.size / sizeof objc_class); c++)
+                    for (int c = 0; c < (section.size / sizeof(objc_class)); c++)
                     {
                         auto& cls = classes[c];
 
@@ -151,7 +151,7 @@ void convert_slice(const MemoryAddress d)
                     };
 
                     _cfstring* strings = d.Offset(section.offset).Cast<_cfstring*>();
-                    for (int s = 0; s < (section.size / sizeof _cfstring); s++)
+                    for (int s = 0; s < (section.size / sizeof(_cfstring)); s++)
                     {
                         auto& string = strings[s];
                         printf("cfstr ISA 0x%02llX\n", string.isa);
@@ -174,7 +174,7 @@ void convert_slice(const MemoryAddress d)
                 if (sectname.starts_with("__data"))
                 {
                     uint64_t* strings = d.Offset(section.offset).Cast<uint64_t*>();
-                    for (int s = 0; s < (section.size / sizeof uint64_t); s++)
+                    for (int s = 0; s < (section.size / sizeof(uint64_t)); s++)
                     {
                         auto& string = strings[s];
                         printf("current str isa: 0x%02llX, hikari str: 0x%02llX, hikari stroff: 0x%02llX\n", cfStringISA, string, uint64_t(&string - d.GetPtr()));
@@ -209,7 +209,7 @@ void convert(const std::span<uint8_t>& data)
         auto nslices = machHeaderPointer.nfat_arch;
         for (int i = 0; i < nslices; i++)
         {
-            auto slice = d.Offset(sizeof fat_header).Offset(i * sizeof fat_arch).GetValue<fat_arch>();
+            auto slice = d.Offset(sizeof(fat_header)).Offset(i * sizeof(fat_arch)).GetValue<fat_arch>();
             swapStruct(slice);
             convert_slice(d.Offset(slice.offset));
         }

@@ -165,21 +165,6 @@ public:
 		memset((void*)ptr, value, num);
 	}
 
-	void PatchString(const char* str, size_t targetBufferLengthIncludingNullTerminator)
-	{
-		auto _strlen = strlen(str);
-#ifdef SPDLOG_H
-		if (_strlen > targetBufferLengthIncludingNullTerminator)
-			spdlog::warn("[MemoryAddress::PatchString] String \"{}\" was too long ({}) to fit into the field whose max length was {}", str, strlen(str), targetBufferLengthIncludingNullTerminator);
-		else if (_strlen == targetBufferLengthIncludingNullTerminator) //if (((char*)ptr)[targetBufferLengthIncludingNullTerminator - 1] != '\0')
-			spdlog::warn("[MemoryAddress::PatchString] String \"{}\" equals the max length of {}, which means its last character will need to be replaced with a null terminator", str, targetBufferLengthIncludingNullTerminator);
-#endif // SPDLOG_H
-		strncpy_s((char*)ptr, targetBufferLengthIncludingNullTerminator, str, _TRUNCATE); // strncpy_s => Note that unlike strncpy, if count is greater than the length of strSource, the destination string is NOT padded with null characters up to length count.
-		memset((void*)(ptr + _strlen), 0, targetBufferLengthIncludingNullTerminator - _strlen); // pad remaining bytes with zeroes
-		if (((char*)ptr)[targetBufferLengthIncludingNullTerminator - 1] != '\0') // a separate if since that always needs to be done
-			((char*)ptr)[targetBufferLengthIncludingNullTerminator - 1] = '\0';
-	}
-
 protected:
 	std::uintptr_t ptr = 0;
 };
