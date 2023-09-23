@@ -34,5 +34,7 @@ g++ -std=c++20 -o allemande main.cpp
 
 Clang:
 ```
-clang -std=c++20 -o allemande main.cpp
+clang++ -std=c++20 -o allemande main.cpp
 ```
+
+If you're compiling it on iOS itself, remember to also sign it with `ldid -S`
