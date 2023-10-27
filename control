@@ -1,0 +1,9 @@
+Package: net.p0358.allemande
+Name: allemande
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: iOS arm64e oldabi converter tool
+Maintainer: p0358
+Author: p0358
+Section: System
+Tag: role::hacker

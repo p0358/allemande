@@ -39,17 +39,29 @@ Clang:
 clang++ -std=c++20 -o allemande main.cpp
 ```
 
-If you're compiling it on iOS itself, remember to also sign it with `ldid -S`
+If you're compiling it manually on iOS itself, remember to also sign it with `ldid -S`
+
+### iOS with Theos
+
+```
+make package THEOS_PACKAGE_SCHEME=rootless
+```
+
+Then it builds a `net.p0358.allemande` deb, installing which will give you `allemande` tool on your device.
 
 ## Usage with Theos
+
+If you want to set up your Theos to invoke `allemande` over compiled arm64e binaries built for rootless:
 
 Edit the file `$THEOS/makefiles/instance/rules.mk`, find the line `$(ECHO_MERGING)$(ECHO_UNBUFFERED)$(TARGET_LIPO) $(foreach ARCH,$(TARGET_ARCHS),-arch $(ARCH) $(THEOS_OBJ_DIR)/$(ARCH)/$(1)) -create -output "$$@"$(ECHO_END)` and insert the following underneath:
 ```makefile
 ifeq ($(THEOS_PACKAGE_SCHEME),rootless)
 ifneq ($(filter arm64e,$(TARGET_ARCHS)),)
-        /path/to/allemande "$$@"
+    /path/to/allemande "$$@"
 endif
 endif
 ```
 
 (here it assumes that you only want to run it through allemande if building for rootless, and if target archs include arm64e – all rootful jailbreaks should not require the usage of new ABI...)
+
+Regrettably there's currently no nicer way in Theos to have a hook in between lipo and binary signing.
