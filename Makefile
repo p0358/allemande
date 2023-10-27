@@ -1,6 +1,7 @@
 # Theos makefile to build this tool onto iOS
 
 TARGET := iphone:clang:15.5:15.0
+ARCHS = arm64
 
 include $(THEOS)/makefiles/common.mk
 

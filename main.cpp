@@ -122,10 +122,10 @@ void convert_slice(const MemoryAddress d)
 
                         auto& data = d.Offset(cls.data & 0x0000000fffffffff).GetValueRef<class_ro_t>();
 
-                        printf("class_ro_t flags:\t0x%02lX\n", data.flags);
-                        printf("class_ro_t instanceStart:\t0x%02lX\n", data.instanceStart);
-                        printf("class_ro_t instanceSize:\t0x%02lX\n", data.instanceSize);
-                        printf("class_ro_t reserved:\t0x%02lX\n", data.reserved);
+                        printf("class_ro_t flags:\t0x%02iX\n", data.flags);
+                        printf("class_ro_t instanceStart:\t0x%02iX\n", data.instanceStart);
+                        printf("class_ro_t instanceSize:\t0x%02iX\n", data.instanceSize);
+                        printf("class_ro_t reserved:\t0x%02iX\n", data.reserved);
                         printf("class_ro_t ivarLayoutOrNonMetaclass:\t0x%02llX\n", data.ivarLayoutOrNonMetaclass);
                         printf("class_ro_t name:\t%s\n", d.Offset(data.name & 0x0000000fffffffff).Cast<const char*>());
                         printf("class_ro_t baseMethodList:\t0x%02llX\n", data.baseMethodList);
@@ -198,7 +198,7 @@ void convert_slice(const MemoryAddress d)
 void convert(const std::span<uint8_t>& data)
 {
     const MemoryAddress d{ data.data() };
-    printf("convert len:%llu\n", data.size());
+    printf("convert len:%llu\n", (unsigned long long)data.size());
 
     auto machHeaderPointer = d.GetValue<fat_header>();
     swapStruct(machHeaderPointer);
